@@ -1,4 +1,5 @@
 import {
+  HttpTransportType,
   HubConnection,
   HubConnectionBuilder,
   LogLevel,
@@ -14,7 +15,10 @@ export const Video = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl("http://192.168.5.115:9880/hubs/imagestream")
+      .withUrl("http://192.168.5.115:9880/hubs/imagestream", {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Debug)
       .build();
