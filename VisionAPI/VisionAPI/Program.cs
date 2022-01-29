@@ -39,6 +39,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+var scrapper = app.Services.GetRequiredService<ImageScrapperService>();
+scrapper.Run();
 //app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

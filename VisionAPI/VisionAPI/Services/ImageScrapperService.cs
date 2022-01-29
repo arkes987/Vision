@@ -49,7 +49,7 @@ namespace VisionAPI.Services
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                return await ScrapImages(url, channel);
             }
         }
 
