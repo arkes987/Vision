@@ -15,7 +15,7 @@ export const Video = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl("http://192.168.5.115:9880/hubs/imagestream", {
+      .withUrl("http://77.87.73.205:9880/hubs/imagestream", {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       })
