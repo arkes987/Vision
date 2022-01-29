@@ -14,7 +14,7 @@ export const Video = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5046/hubs/imagestream")
+      .withUrl("http://192.168.5.115:9880/hubs/imagestream")
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Debug)
       .build();
