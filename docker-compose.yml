@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  solar-api:
+  vision-api:
     image: vision-api:release
     restart: always
     build:
@@ -15,7 +15,7 @@ services:
     ports:
       - 9880:80
       - 9444:443
-  solar-app:
+  vision-app:
     image: vision-app:release
     restart: always
     stdin_open: true
@@ -28,6 +28,6 @@ services:
     networks:
       - vision-network
 networks:
-  solar-network:
+  vision-network:
     external:
       name: vision-network
