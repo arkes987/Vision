@@ -1,21 +1,21 @@
 FROM balenalib/raspberry-pi-alpine-node:14-3.13 as builder
 
 WORKDIR /app
-COPY ./frontend/package*.json ./
+COPY ./vision/package*.json ./
 RUN npm install --no-optional
 
 ARG REACT_APP_BUILD
 
 ENV REACT_APP_BUILD $REACT_APP_BUILD
 
-COPY ./frontend/ ./
+COPY ./vision/ ./
 RUN npm run build
 
-COPY ./frontend/.env ./build
+COPY ./vision/.env ./build
 
 FROM nginx:stable
 
-COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./vision/nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app/build /usr/share/nginx/html
 COPY --from=builder /app/build/.env /usr/share/nginx/html

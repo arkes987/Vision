@@ -7,14 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine-arm64v8 AS build
 WORKDIR /src
-COPY ["VisionAPI/VisionAPI/VisionAPI.csproj", "VisionAPI/"]
-RUN dotnet restore "VisionAPI/VisionAPI.csproj"
+COPY ["VisionAPI/VisionAPI/VisionAPI.csproj", "VisionAPI/VisionAPI/"]
+RUN dotnet restore "VisionAPI/VisionAPI/VisionAPI.csproj"
 COPY . .
 WORKDIR "/src/VisionAPI"
-RUN dotnet build "VisionAPI.csproj" -c Release -o /app/build
+RUN dotnet build "VisionAPI/VisionAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "VisionAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "VisionAPI/VisionAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
