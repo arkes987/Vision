@@ -11,8 +11,6 @@ ENV REACT_APP_BUILD $REACT_APP_BUILD
 COPY ./vision/ ./
 RUN npm run build
 
-COPY ./vision/.env ./build
-
 FROM nginx:stable
 
 COPY ./vision/nginx.conf /etc/nginx/conf.d/default.conf
