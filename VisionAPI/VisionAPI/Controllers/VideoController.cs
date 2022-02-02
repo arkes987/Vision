@@ -13,12 +13,12 @@ namespace VisionAPI.Controllers
             _scrapperService = imageScrapperService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RunService()
-        {
-            _scrapperService.Run();
+        //[HttpPost]
+        //public async Task<IActionResult> RunService()
+        //{
+        //    _scrapperService.Run();
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }
