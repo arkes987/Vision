@@ -15,6 +15,11 @@ services:
     ports:
       - 9880:80
       - 9444:443
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 100M
   vision-app:
     image: vision-app:release
     restart: always
