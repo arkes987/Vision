@@ -13,7 +13,7 @@ namespace VisionAPI.Services
             _configuration = configuration;
             _imageHub = imageHub;
         }
-        public void Run()
+        public async void Run()
         {
             var servers = _configuration.GetSection("Servers").GetChildren();
 
@@ -22,20 +22,19 @@ namespace VisionAPI.Services
                 Directory.CreateDirectory(OutputPath);
             }
 
-            foreach (var server in servers)
-            {
-                Task.Factory.StartNew(() => 
-                { 
-                    ScrapImages(server.Value, server.Key); 
-                });
-            }
+            var tasks = servers.Select(s => ScrapImages(s.Value, s.Key));
+
+            await Task.WhenAll(tasks);
         }
-        private async Task<bool> ScrapImages(string url, string channel)
+        private async Task ScrapImages(string url, string channel)
         {
-            try
+            using WebClient client = new();
+
+            while (true)
             {
-                using (WebClient client = new())
+                try
                 {
+                    
                     //$"{OutputPath}_{channel}.png"
                     var result = await client.DownloadDataTaskAsync(new Uri(url));
                     await _imageHub.SendMessage(new Models.Message()
@@ -43,13 +42,11 @@ namespace VisionAPI.Services
                         File = result,
                         Channel = channel
                     });
-                    return await ScrapImages(url, channel);
                 }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return await ScrapImages(url, channel);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
