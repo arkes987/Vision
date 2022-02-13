@@ -3,6 +3,7 @@ version: "3.5"
 services:
   vision-api:
     image: vision-api:release
+    container_name: vision-api
     restart: always
     build:
       context: .
@@ -22,6 +23,7 @@ services:
           memory: 100M
   vision-app:
     image: vision-app:release
+    container_name: vision-app
     restart: always
     stdin_open: true
     build:
