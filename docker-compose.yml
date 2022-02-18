@@ -14,7 +14,7 @@ services:
     networks:
       - vision-network
     volumes:
-      - /root/Vision/data:/app/output
+      - /mnt/dietpi_userdata:/app/output
     ports:
       - 9880:80
       - 9444:443
