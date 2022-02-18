@@ -14,7 +14,7 @@ services:
     networks:
       - vision-network
     volumes:
-      - ./data:/output
+      - /root/Vision/data:/output
     ports:
       - 9880:80
       - 9444:443
