@@ -13,14 +13,16 @@ services:
       - ASPNETCORE_Servers__Second=http://87.199.89.22:81/snapshot.jpg
     networks:
       - vision-network
+    volumes:
+      - ./data:/output
     ports:
       - 9880:80
       - 9444:443
     deploy:
       resources:
         limits:
-          cpus: '0.2'
-          memory: 100M
+          cpus: '0.3'
+          memory: 150M
   vision-app:
     image: vision-app:release
     container_name: vision-app
