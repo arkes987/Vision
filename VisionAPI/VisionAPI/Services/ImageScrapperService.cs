@@ -17,11 +17,6 @@ namespace VisionAPI.Services
         {
             var servers = _configuration.GetSection("Servers").GetChildren();
 
-            if(!Directory.Exists(OutputPath))
-            {
-                Directory.CreateDirectory(OutputPath);
-            }
-
             var tasks = servers.Select(s => ScrapImages(s.Value, s.Key));
 
             await Task.WhenAll(tasks);
@@ -34,9 +29,17 @@ namespace VisionAPI.Services
             {
                 try
                 {
-                    
-                    //$"{OutputPath}_{channel}.png"
                     var result = await client.DownloadDataTaskAsync(new Uri(url));
+
+                    var pathToSave = GetOutputPath(channel).AppendDay();
+
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    File.WriteAllBytes($"{pathToSave.AppendTimestamp()}.png", result);
+
                     await _imageHub.SendMessage(new Models.Message()
                     {
                         File = result,
@@ -50,14 +53,25 @@ namespace VisionAPI.Services
             }
         }
 
-        private static string OutputPath
+        private static string GetOutputPath(string channel)
         {
-            get
-            {
-                var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-                var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
-                return Path.Combine(fullPath, $"{timestamp}");
-            }
+            var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
+            return Path.Combine(fullPath, channel);
+        }
+    }
+
+    public static class PathExtensions
+    {
+        public static string AppendDay(this string path)
+        {
+            var currentDay = DateTime.Now.ToShortDateString();
+            return Path.Combine(path, currentDay);
+        }
+
+        public static string AppendTimestamp(this string path)
+        {
+            var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            return Path.Combine(path, $"{timestamp}");
         }
     }
 }
