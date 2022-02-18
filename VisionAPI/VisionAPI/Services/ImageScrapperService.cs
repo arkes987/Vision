@@ -71,7 +71,12 @@ namespace VisionAPI.Services
         public static string AppendTimestamp(this string path)
         {
             var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            return Path.Combine(path, $"{timestamp}");
+
+            var time = $"{DateTime.Now.ToShortDateString()}_{DateTime.Now.ToShortTimeString()}";
+
+            var time2 = DateTime.Now.ToString(@"hh\_mm\_ss\_fff");
+
+            return Path.Combine(path, $"{time2}");
         }
     }
 }
