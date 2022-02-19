@@ -31,7 +31,7 @@ namespace VisionAPI.Services
                 {
                     var result = await client.DownloadDataTaskAsync(new Uri(url));
 
-                    var pathToSave = GetOutputPath(channel).AppendDay();
+                    var pathToSave = GetOutputPath(channel).AppendDay().AppendHour();
 
                     if (!Directory.Exists(pathToSave))
                     {
@@ -64,19 +64,21 @@ namespace VisionAPI.Services
     {
         public static string AppendDay(this string path)
         {
-            var currentDay = DateTime.Now.ToShortDateString();
+            var currentDay = DateTime.Now.ToString(@"yyyy_MM_d");
             return Path.Combine(path, currentDay);
+        }
+
+        public static string AppendHour(this string path)
+        {
+            var currentHour = DateTime.Now.ToString(@"HH");
+            return Path.Combine(path, currentHour);
         }
 
         public static string AppendTimestamp(this string path)
         {
-            var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            var time = DateTime.Now.ToString(@"HH.mm.ss");
 
-            var time = $"{DateTime.Now.ToShortDateString()}_{DateTime.Now.ToShortTimeString()}";
-
-            var time2 = DateTime.Now.ToString(@"hh\_mm\_ss\_fff");
-
-            return Path.Combine(path, $"{time2}");
+            return Path.Combine(path, $"{time}");
         }
     }
 }
