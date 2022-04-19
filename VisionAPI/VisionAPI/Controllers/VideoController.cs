@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VisionAPI.Services;
 
 namespace VisionAPI.Controllers
 {
@@ -7,18 +6,14 @@ namespace VisionAPI.Controllers
     [Route("[controller]")]
     public class VideoController : ControllerBase
     {
-        private readonly ImageScrapperService _scrapperService;
-        public VideoController(ImageScrapperService imageScrapperService)
+        public VideoController()
         {
-            _scrapperService = imageScrapperService;
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> RunService()
-        //{
-        //    _scrapperService.Run();
-
-        //    return Ok();
-        //}
+        [HttpGet]
+        public async Task<IActionResult> IsCamHealthy()
+        {
+            return Ok(true);
+        }
     }
 }

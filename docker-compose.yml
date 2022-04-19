@@ -9,9 +9,10 @@ services:
       context: .
       dockerfile: VisionAPI/VisionAPI/Dockerfile
     environment:
-      - ASPNETCORE_Servers__First=http://87.199.89.22/snapshot.jpg
-      - ASPNETCORE_Servers__Second=http://87.199.89.22:81/snapshot.jpg
+      - ASPNETCORE_Servers__Domki=http://87.199.89.22/snapshot.jpg
+      - ASPNETCORE_Servers__Brama=http://87.199.89.22:81/snapshot.jpg
       - TZ=Europe/Warsaw
+      - ASPNETCORE_Cron__DeleteOldVideosCron="0 0 1 * * ?"
     networks:
       - vision-network
     volumes:

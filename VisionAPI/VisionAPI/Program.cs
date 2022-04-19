@@ -1,4 +1,6 @@
+using Quartz;
 using VisionAPI.Hubs;
+using VisionAPI.Jobs;
 using VisionAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,35 @@ builder.Services.AddCors(options =>
             .WithOrigins("http://192.168.5.115", "http://77.87.73.205:8080")
             .AllowCredentials();
     });
+});
+
+builder.Services.Configure<QuartzOptions>(options =>
+{
+    options.Scheduling.IgnoreDuplicates = true; // default: false
+    options.Scheduling.OverWriteExistingData = true; // default: true
+});
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    // base quartz scheduler, job and trigger configuration
+
+    var deleteOldVideosJobSchedule = builder.Configuration["Cron:DeleteOldVideosCron"];
+
+    if (!string.IsNullOrEmpty(deleteOldVideosJobSchedule))
+    {
+        q.ScheduleJob<DeleteOldVideosJob>(trigger => trigger
+            .WithIdentity("DeleteOldVideosCron", "CronJobs")
+            .WithCronSchedule(deleteOldVideosJobSchedule)
+        );
+    }
+});
+
+// ASP.NET Core hosting
+builder.Services.AddQuartzServer(options =>
+{
+    // when shutting down we want jobs to complete gracefully
+    options.WaitForJobsToComplete = true;
 });
 
 var app = builder.Build();

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using VisionAPI.Extensions;
 using VisionAPI.Hubs;
 
 namespace VisionAPI.Services
@@ -31,7 +32,7 @@ namespace VisionAPI.Services
                 {
                     var result = await client.DownloadDataTaskAsync(new Uri(url));
 
-                    var pathToSave = GetOutputPath(channel).AppendDay().AppendHour();
+                    var pathToSave = channel.GetOutputPath().AppendDay().AppendHour();
 
                     if (!Directory.Exists(pathToSave))
                     {
@@ -51,34 +52,6 @@ namespace VisionAPI.Services
                     Console.WriteLine(ex.Message);
                 }
             }
-        }
-
-        private static string GetOutputPath(string channel)
-        {
-            var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
-            return Path.Combine(fullPath, channel);
-        }
-    }
-
-    public static class PathExtensions
-    {
-        public static string AppendDay(this string path)
-        {
-            var currentDay = DateTime.Now.ToString(@"yyyy_MM_d");
-            return Path.Combine(path, currentDay);
-        }
-
-        public static string AppendHour(this string path)
-        {
-            var currentHour = DateTime.Now.ToString(@"HH");
-            return Path.Combine(path, currentHour);
-        }
-
-        public static string AppendTimestamp(this string path)
-        {
-            var time = DateTime.Now.ToString(@"HH.mm.ss");
-
-            return Path.Combine(path, $"{time}");
         }
     }
 }
