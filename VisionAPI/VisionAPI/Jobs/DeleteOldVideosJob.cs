@@ -28,7 +28,7 @@ namespace VisionAPI.Jobs
                 {
                     var dirInfo = new DirectoryInfo(directory);
 
-                    if (dirInfo.CreationTime < DateTime.Now.Add(_timeSpan))
+                    if (dirInfo.CreationTime < DateTimeExtensions.GetNow().Add(_timeSpan))
                     {
                         dirInfo.Delete(true);
                     }
