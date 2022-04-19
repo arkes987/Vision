@@ -11,6 +11,7 @@ services:
     environment:
       - ASPNETCORE_Servers__First=http://87.199.89.22/snapshot.jpg
       - ASPNETCORE_Servers__Second=http://87.199.89.22:81/snapshot.jpg
+      - TZ=Europe/Warsaw
     networks:
       - vision-network
     volumes:
@@ -31,6 +32,8 @@ services:
     build:
       context: .
       dockerfile: vision/Dockerfile
+    environment:
+      - TZ=Europe/Warsaw
     ports:
       - 80:80
       - 9004:443
