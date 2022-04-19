@@ -16,9 +16,7 @@ namespace VisionAPI.Extensions
 
     public static class TimeZones
     {
-        public static TimeZoneInfo CentralEuropeanTimeZone => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? GetTimeZone("Central European Standard Time")
-            : GetTimeZone("CET");
+        public static TimeZoneInfo CentralEuropeanTimeZone => GetTimeZone("Central European Standard Time");
 
         private static TimeZoneInfo GetTimeZone(string timeZoneId)
         {
