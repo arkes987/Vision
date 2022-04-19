@@ -35,10 +35,10 @@ export const Video = () => {
 
           connection.on("ReceiveMessage", (message: IMessage) => {
             switch (message.channel) {
-              case "First":
+              case "Domki":
                 setStreamOne(message.file);
                 break;
-              case "Second":
+              case "Brama":
                 setStreamTwo(message.file);
                 break;
             }
