@@ -24,28 +24,37 @@ namespace VisionAPI.Services
         }
         private async Task ScrapImages(string url, string channel)
         {
-            using WebClient client = new();
+            using var client = new HttpClient();
+
+            client.Timeout = TimeSpan.FromSeconds(2);
 
             while (true)
             {
                 try
                 {
-                    var result = await client.DownloadDataTaskAsync(new Uri(url));
+                    var result = await client.GetAsync(url);
 
-                    var pathToSave = channel.GetOutputPath().AppendDay().AppendHour();
-
-                    if (!Directory.Exists(pathToSave))
+                    if(result.IsSuccessStatusCode)
                     {
-                        Directory.CreateDirectory(pathToSave);
+                        var content = await result.Content.ReadAsByteArrayAsync();
+
+                        var pathToSave = channel.GetOutputPath().AppendDay().AppendHour();
+
+                        if (!Directory.Exists(pathToSave))
+                        {
+                            Directory.CreateDirectory(pathToSave);
+                        }
+
+                        File.WriteAllBytes($"{pathToSave.AppendTimestamp()}.png", content);
+
+                        await _imageHub.SendMessage(new Models.Message()
+                        {
+                            File = content,
+                            Channel = channel
+                        });
                     }
 
-                    File.WriteAllBytes($"{pathToSave.AppendTimestamp()}.png", result);
 
-                    await _imageHub.SendMessage(new Models.Message()
-                    {
-                        File = result,
-                        Channel = channel
-                    });
                 }
                 catch (Exception ex)
                 {
